@@ -34,6 +34,12 @@ function Home({ ingredients, setIngredients, input, setInput, suggestions, setSu
   const fetchRecipes = async (page = 1, append = false) => {
     if (ingredients.length === 0) {
       setError('Please add at least one ingredient.');
+      // When ingredients are empty, and not appending, clear previous recipes
+      if (!append) {
+        setRecipes([]);
+        setHasMore(false);
+      }
+      setIsLoading(false);
       return;
     }
     setIsLoading(true);
@@ -97,7 +103,7 @@ function Home({ ingredients, setIngredients, input, setInput, suggestions, setSu
 
   useEffect(() => {
     setCurrentPage(1);
-    setRecipes([]);
+    setRecipes([]); // Clear recipes when filters/ingredients change for a fresh search
     fetchRecipes(1, false);
   }, [ingredients, dietaryPref, cookingTime, cuisine]);
 
@@ -111,7 +117,7 @@ function Home({ ingredients, setIngredients, input, setInput, suggestions, setSu
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center p-4 sm:p-6"> {/* Added padding for overall layout */}
       <Header
         favoritesCount={favorites.length}
         setShowFavorites={setShowFavorites}

@@ -52,9 +52,9 @@ function ProductSearch({ setSelectedProduct, setError }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full bg-white rounded-2xl shadow-2xl p-6 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
+      className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
     >
-      <h2 className="text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
+      <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
         Find Products
       </h2>
       <div className="relative">
@@ -63,10 +63,10 @@ function ProductSearch({ setSelectedProduct, setError }) {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search for products (e.g., pasta sauce)"
-          className="w-full p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
+          className="w-full p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
         />
         {productSuggestions.length > 0 && (
-          <ul className="absolute w-full bg-white border-2 border-teal-300 rounded-xl shadow-lg mt-2 z-20 max-h-48 overflow-y-auto">
+          <ul className="absolute w-full bg-white border-2 border-teal-300 rounded-xl shadow-lg mt-2 z-20 max-h-48 overflow-y-auto text-sm sm:text-base"> {/* Adjusted font size */}
             {productSuggestions.map((suggestion, index) => (
               <li
                 key={index}

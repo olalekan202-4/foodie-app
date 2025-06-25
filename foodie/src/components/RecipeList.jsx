@@ -2,12 +2,12 @@ import { motion } from 'framer-motion';
 
 function RecipeList({ recipes, isLoading, favorites, toggleFavorite, setSelectedRecipe, fetchMoreRecipes, hasMore, showFavorites }) {
   return (
-    <div className="w-full">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-0"> {/* Added max-w-4xl and horizontal padding */}
       {isLoading ? (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center text-gray-700 text-xl font-medium animate-pulse"
+          className="text-center text-gray-700 text-lg sm:text-xl font-medium animate-pulse py-8"
         >
           Loading recipes...
         </motion.p>
@@ -17,7 +17,7 @@ function RecipeList({ recipes, isLoading, favorites, toggleFavorite, setSelected
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center text-gray-700 text-xl font-medium"
+              className="text-center text-gray-700 text-lg sm:text-xl font-medium py-8"
             >
               No recipes found. Add ingredients to start!
             </motion.p>
@@ -33,14 +33,15 @@ function RecipeList({ recipes, isLoading, favorites, toggleFavorite, setSelected
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-2xl shadow-2xl p-6 mb-6 hover:scale-105 transition duration-300 border-2 border-teal-300"
+                  className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-2xl shadow-2xl p-4 sm:p-6 mb-6 hover:scale-105 transition duration-300 border-2 border-teal-300"
                 >
-                  <div className="flex items-center space-x-6">
-                    <div className="w-20 h-20 bg-gradient-to-r from-lime-300 to-teal-300 rounded-xl flex-shrink-0 shadow-md" />
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6"> {/* Responsive flex */}
+                    {/* Image placeholder - consider making it an actual image from recipe.image */}
+                    <div className="w-full h-32 sm:w-20 sm:h-20 bg-gradient-to-r from-lime-300 to-teal-300 rounded-xl flex-shrink-0 shadow-md" />
+                    <div className="flex-1 w-full"> {/* Ensure it takes full width on small screens */}
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 sm:mb-0"> {/* Responsive title and favorite */}
                         <h3
-                          className="text-xl font-bold text-gray-800 cursor-pointer hover:text-orange-500 transition duration-150"
+                          className="text-lg sm:text-xl font-bold text-gray-800 cursor-pointer hover:text-orange-500 transition duration-150 mb-2 sm:mb-0"
                           onClick={() => setSelectedRecipe(recipe)}
                         >
                           {recipe.title}

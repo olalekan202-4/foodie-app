@@ -85,7 +85,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" // Added padding for small screens
         onClick={() => setSelectedRecipe(null)}
       >
         <motion.div
@@ -93,27 +93,27 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-2xl p-8 max-w-xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500"
+          className="bg-white rounded-2xl p-6 sm:p-8 max-w-md sm:max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500" // Adjusted max-width and padding
           onClick={(e) => e.stopPropagation()}
         >
-          <h2 className="text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
             {recipe.title}
           </h2>
           {isLoading ? (
-            <p className="text-gray-700 text-center animate-pulse">Loading recipe details...</p>
+            <p className="text-gray-700 text-center animate-pulse py-8">Loading recipe details...</p>
           ) : error ? (
-            <p className="text-red-500 text-center">{error}</p>
+            <p className="text-red-500 text-center py-8">{error}</p>
           ) : (
             <>
-              <div className="mb-6 bg-gradient-to-r from-orange-50 to-pink-50 p-4 rounded-xl">
-                <p className="text-gray-700 flex items-center space-x-2">
+              <div className="mb-6 bg-gradient-to-r from-orange-50 to-pink-50 p-4 rounded-xl text-sm sm:text-base"> {/* Adjusted font size */}
+                <p className="text-gray-700 flex items-center space-x-2 mb-1">
                   <span className="text-lime-500">⏰</span>
                   <span>
                     <strong>Time:</strong>{' '}
                     {detailedRecipe?.readyInMinutes || recipe.readyInMinutes || 'N/A'} mins
                   </span>
                 </p>
-                <p className="text-gray-700 flex items-center space-x-2">
+                <p className="text-gray-700 flex items-center space-x-2 mb-1">
                   <span className="text-lime-500">🥗</span>
                   <span>
                     <strong>Dietary:</strong>{' '}
@@ -124,7 +124,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                       : 'N/A'}
                   </span>
                 </p>
-                <p className="text-gray-700 flex items-center space-x-2">
+                <p className="text-gray-700 flex items-center space-x-2 mb-1">
                   <span className="text-lime-500">🌍</span>
                   <span>
                     <strong>Cuisine:</strong>{' '}
@@ -150,7 +150,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                   <span>Ingredients</span>
                 </h3>
                 {detailedRecipe?.extendedIngredients?.length > 0 ? (
-                  <ul className="list-disc pl-6 text-gray-700">
+                  <ul className="list-disc pl-6 text-gray-700 text-sm sm:text-base"> {/* Adjusted font size */}
                     {detailedRecipe.extendedIngredients.map((ing, index) => (
                       <li key={index} className="mb-2">
                         <div className="flex flex-col">
@@ -159,15 +159,15 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                             {amounts[ing.name] && `(${amounts[ing.name]} ${targetUnit[ing.name]})`}
                           </span>
                           {ingredients.includes(ing.name) ? (
-                            <span className="text-green-500 text-sm">✔️ In Pantry</span>
+                            <span className="text-green-500 text-xs sm:text-sm">✔️ In Pantry</span>
                           ) : (
                             <>
                               {substitutes[ing.name]?.length > 0 && (
-                                <span className="text-gray-500 text-sm">
+                                <span className="text-gray-500 text-xs sm:text-sm">
                                   Substitutes: {substitutes[ing.name].join(', ')}
                                 </span>
                               )}
-                              <div className="flex space-x-2 mt-1">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-1"> {/* Responsive flex */}
                                 <select
                                   onChange={(e) =>
                                     setTargetUnit((prev) => ({
@@ -175,7 +175,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                                       [ing.name]: e.target.value,
                                     }))
                                   }
-                                  className="p-1 border-2 border-teal-300 rounded-md text-sm"
+                                  className="p-1 border-2 border-teal-300 rounded-md text-xs sm:text-sm w-full sm:w-auto"
                                 >
                                   <option value="">Convert to...</option>
                                   <option value="gram">Gram</option>
@@ -193,7 +193,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                                       ing.name
                                     )
                                   }
-                                  className="bg-teal-500 text-white px-2 py-1 rounded-md text-sm hover:bg-teal-600 transition duration-150"
+                                  className="bg-teal-500 text-white px-2 py-1 rounded-md text-xs sm:text-sm hover:bg-teal-600 transition duration-150"
                                   disabled={!targetUnit[ing.name]}
                                 >
                                   Convert
@@ -206,7 +206,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                     ))}
                   </ul>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm sm:text-base"> {/* Adjusted font size */}
                     <div>
                       <p className="text-gray-700 font-semibold flex items-center space-x-2">
                         <span className="text-green-500">✔️</span>
@@ -228,7 +228,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                           <li key={index}>
                             {ing.name}
                             {substitutes[ing.name]?.length > 0 && (
-                              <span className="text-gray-500 text-sm">
+                              <span className="text-gray-500 text-xs sm:text-sm">
                                 {' '}
                                 (Substitutes: {substitutes[ing.name].join(', ')})
                               </span>
@@ -246,7 +246,7 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                   <span>Instructions</span>
                 </h3>
                 {detailedRecipe?.analyzedInstructions?.length > 0 ? (
-                  <ol className="list-decimal pl-6 text-gray-700">
+                  <ol className="list-decimal pl-6 text-gray-700 text-sm sm:text-base"> {/* Adjusted font size */}
                     {detailedRecipe.analyzedInstructions[0].steps.map((step, index) => (
                       <li key={index} className="mb-2">
                         {step.step}
@@ -254,12 +254,12 @@ function RecipeModal({ recipe, setSelectedRecipe, ingredients }) {
                     ))}
                   </ol>
                 ) : (
-                  <p className="text-gray-700">
+                  <p className="text-gray-700 text-sm sm:text-base">
                     No detailed instructions available. Check the recipe source for more details.
                   </p>
                 )}
               </div>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"> {/* Responsive flex */}
                 <button
                   onClick={() => alert('Share recipe (to be implemented)')}
                   className="flex-1 bg-gradient-to-r from-lime-500 to-teal-500 text-white py-3 rounded-xl hover:from-lime-600 hover:to-teal-600 transition duration-200 shadow-md hover:shadow-lg"

@@ -37,39 +37,39 @@ function PantryInput({ ingredients, setIngredients, input, setInput, suggestions
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full bg-white rounded-2xl shadow-2xl p-8 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
+      className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
     >
-      <h2 className="text-3xl font-bold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
         Build Your Pantry
       </h2>
-      <div className="relative flex flex-col sm:flex-row sm:space-x-4 mb-6">
+      <div className="relative flex flex-col sm:flex-row gap-4 sm:gap-2 mb-6">
         <input
           ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Add ingredient (e.g., tomato)"
-          className="flex-1 p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
+          className="flex-1 p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
           onKeyPress={(e) => e.key === 'Enter' && addIngredient()}
         />
-        <div className="flex space-x-2 mt-4 sm:mt-0">
+        <div className="flex space-x-2 w-full sm:w-auto"> {/* Adjusted width for buttons */}
           <button
             onClick={addIngredient}
-            className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-orange-600 hover:to-pink-600 transition duration-200 shadow-md hover:shadow-lg"
+            className="flex-1 sm:flex-none bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-3 rounded-xl hover:from-orange-600 hover:to-pink-600 transition duration-200 shadow-md hover:shadow-lg"
           >
             Add
           </button>
           {ingredients.length > 0 && (
             <button
               onClick={clearAll}
-              className="bg-gradient-to-r from-gray-400 to-gray-500 text-white px-6 py-3 rounded-xl hover:from-gray-500 hover:to-gray-600 transition duration-200 shadow-md hover:shadow-lg"
+              className="flex-1 sm:flex-none bg-gradient-to-r from-gray-400 to-gray-500 text-white px-5 py-3 rounded-xl hover:from-gray-500 hover:to-gray-600 transition duration-200 shadow-md hover:shadow-lg"
             >
               Clear All
             </button>
           )}
         </div>
         {suggestions.length > 0 && (
-          <div className="absolute top-full left-0 w-full sm:w-1/2 bg-white border-2 border-teal-300 rounded-xl shadow-lg mt-2 z-20 max-h-48 overflow-y-auto">
+          <div className="absolute top-full left-0 w-full sm:w-2/3 md:w-1/2 bg-white border-2 border-teal-300 rounded-xl shadow-lg mt-2 z-20 max-h-48 overflow-y-auto"> {/* Adjusted width */}
             {suggestions.map((suggestion, index) => (
               <div
                 key={index}
@@ -90,7 +90,7 @@ function PantryInput({ ingredients, setIngredients, input, setInput, suggestions
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-gradient-to-r from-lime-200 to-teal-200 text-gray-800 px-4 py-2 rounded-full flex items-center shadow-md hover:scale-105 transition duration-150"
+            className="bg-gradient-to-r from-lime-200 to-teal-200 text-gray-800 px-4 py-2 rounded-full flex items-center shadow-md hover:scale-105 transition duration-150 text-sm sm:text-base"
           >
             {ingredient}
             <button

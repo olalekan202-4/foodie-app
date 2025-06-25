@@ -83,7 +83,7 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" // Added padding
         onClick={() => setShowModal(false)}
       >
         <motion.div
@@ -91,40 +91,40 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-2xl p-8 max-w-xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500"
+          className="bg-white rounded-2xl p-6 sm:p-8 max-w-md sm:max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500" // Adjusted max-width and padding
           onClick={(e) => e.stopPropagation()}
         >
-          <h3 className="text-2xl font-bold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
             Search Restaurants in Nigeria
           </h3>
-          <div className="flex mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 mb-6">
             <input
               type="text"
               value={locationInput}
               onChange={(e) => setLocationInput(e.target.value)}
               placeholder="Enter a Nigerian city (e.g., Lagos, Abuja)"
-              className="flex-1 p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
+              className="flex-1 p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
               onKeyPress={(e) => e.key === 'Enter' && searchRestaurants()}
             />
             <button
               onClick={searchRestaurants}
-              className="ml-4 bg-gradient-to-r from-teal-500 to-lime-500 text-white px-6 py-3 rounded-xl hover:from-teal-600 hover:to-lime-600 transition duration-200 shadow-md hover:shadow-lg"
+              className="bg-gradient-to-r from-teal-500 to-lime-500 text-white px-5 py-3 rounded-xl hover:from-teal-600 hover:to-lime-600 transition duration-200 shadow-md hover:shadow-lg"
             >
               Search
             </button>
           </div>
           {isLoading ? (
-            <p className="text-gray-500 text-center animate-pulse">Loading restaurants...</p>
+            <p className="text-gray-500 text-center animate-pulse py-4">Loading restaurants...</p>
           ) : error ? (
-            <p className="text-red-500 text-center">{error}</p>
+            <p className="text-red-500 text-center py-4 text-sm sm:text-base">{error}</p>
           ) : restaurants.length > 0 ? (
             <ul className="list-none">
               {restaurants.map((restaurant, index) => (
                 <li
                   key={index}
-                  className="mb-4 bg-gradient-to-r from-orange-50 to-pink-100 p-4 rounded-xl"
+                  className="mb-4 bg-gradient-to-r from-orange-50 to-pink-100 p-4 rounded-xl text-sm sm:text-base"
                 >
-                  <h4 className="text-lg font-bold text-gray-800">{restaurant.name}</h4>
+                  <h4 className="text-base sm:text-lg font-bold text-gray-800">{restaurant.name}</h4>
                   <p className="text-gray-600">{restaurant.address}</p>
                   <p className="text-gray-600">Rating: {restaurant.rating || 'N/A'}</p>
                   <p className="text-gray-600">
@@ -134,7 +134,7 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600 text-center">Enter a Nigerian city to find restaurants.</p>
+            <p className="text-gray-600 text-center py-4 text-sm sm:text-base">Enter a Nigerian city to find restaurants.</p>
           )}
           <button
             onClick={() => setShowModal(false)}

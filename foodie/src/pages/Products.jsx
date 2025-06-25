@@ -6,7 +6,7 @@ function Products({ setError }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   return (
-    <div>
+    <div className="w-full max-w-4xl mx-auto p-4 sm:p-6"> {/* Added max-w-4xl and padding */}
       <ProductSearch setSelectedProduct={setSelectedProduct} setError={setError} />
       {selectedProduct && <ProductDetails />}
     </div>

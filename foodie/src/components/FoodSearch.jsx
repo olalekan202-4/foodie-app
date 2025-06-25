@@ -125,23 +125,23 @@ function FoodSearch({ setError }) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full bg-white rounded-2xl shadow-2xl p-8 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
+      className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 mb-6 border-2 border-gradient-to-r from-orange-500 to-pink-500"
     >
-      <h2 className="text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
+      <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
         Search All Food
       </h2>
-      <div className="flex mb-6">
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 mb-6">
         <input
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search recipes, products, restaurants in Nigeria (e.g., Lagos, jollof rice)"
-          className="flex-1 p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
+          className="flex-1 p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
           onKeyPress={(e) => e.key === 'Enter' && performSearch()}
         />
         <button
           onClick={performSearch}
-          className="ml-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-3 rounded-xl hover:from-orange-600 hover:to-pink-600 transition duration-200 shadow-md hover:shadow-lg"
+          className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-5 py-3 rounded-xl hover:from-orange-600 hover:to-pink-600 transition duration-200 shadow-md hover:shadow-lg"
         >
           Search
         </button>
@@ -152,12 +152,12 @@ function FoodSearch({ setError }) {
         <div className="space-y-6">
           {results.recipes.length > 0 && (
             <div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Recipes</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">Recipes</h3>
               <ul className="list-disc pl-6">
                 {results.recipes.map((recipe, index) => (
                   <li
                     key={recipe.id || index}
-                    className="cursor-pointer text-gray-700 hover:text-orange-600 transition duration-150"
+                    className="cursor-pointer text-gray-700 hover:text-orange-600 transition duration-150 py-1"
                     onClick={() => navigate(`/recipe/${recipe.id}`)}
                   >
                     {recipe.title}
@@ -168,12 +168,12 @@ function FoodSearch({ setError }) {
           )}
           {results.products.length > 0 && (
             <div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Products</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">Products</h3>
               <ul className="list-disc pl-6">
                 {results.products.map((product, index) => (
                   <li
                     key={product.id || index}
-                    className="cursor-pointer text-gray-700 hover:text-orange-600 transition duration-150"
+                    className="cursor-pointer text-gray-700 hover:text-orange-600 transition duration-150 py-1"
                     onClick={() => navigate(`/products/${product.id}`)}
                   >
                     {product.title}
@@ -184,7 +184,7 @@ function FoodSearch({ setError }) {
           )}
           {results.restaurants.length > 0 && (
             <div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Restaurants</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">Restaurants</h3>
               <ul className="list-disc pl-6">
                 {results.restaurants.map((restaurant, index) => (
                   <li key={index} className="text-gray-600 mb-2">
