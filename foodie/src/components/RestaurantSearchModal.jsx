@@ -35,11 +35,16 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
 
   const searchRestaurants = async () => {
     if (!locationInput.trim()) {
-      setError('Please enter a city in Nigeria.');
+      setError('Please enter a city or location to search.');
       return;
     }
     setIsLoading(true);
     setError('');
+
+    const normalizedInput = locationInput.toLowerCase();
+    const isNigerianSearch = normalizedInput.includes('nigeria') ||
+                             ['lagos', 'abuja', 'port harcourt'].some((city) => normalizedInput.includes(city));
+
     try {
       const response = await axios.get(
         'https://api.spoonacular.com/food/restaurants/search',
@@ -51,24 +56,32 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
           },
         }
       );
-      setRestaurants(response.data.restaurants || []);
+
+      const apiRestaurants = response.data.restaurants || [];
+
+      if (apiRestaurants.length === 0 && isNigerianSearch) {
+        // API returned no results, but it's a Nigerian search, use ALL mock data
+        setRestaurants(mockRestaurants); // Display all mock restaurants for Nigerian searches
+        setError('Live restaurant data for this region is limited. Displaying sample Nigerian restaurants.');
+      } else if (apiRestaurants.length > 0) {
+        // API returned results
+        setRestaurants(apiRestaurants);
+      } else {
+        // API returned no results for a non-Nigerian search, or for an unknown Nigerian city
+        setRestaurants([]);
+        setError('No restaurants found for this location. The API might have limited coverage.');
+        setErrorModal('No restaurants found for this location. The API might have limited coverage.');
+      }
+
     } catch (err) {
       console.error(err);
-      // Fallback to mock data for Nigeria
-      const normalizedInput = locationInput.toLowerCase();
-      if (
-        normalizedInput.includes('nigeria') ||
-        ['lagos', 'abuja', 'port harcourt'].some((city) => normalizedInput.includes(city))
-      ) {
-        const filteredRestaurants = mockRestaurants.filter(
-          (restaurant) =>
-            normalizedInput.includes(restaurant.city.toLowerCase()) ||
-            normalizedInput.includes('nigeria')
-        );
-        setRestaurants(filteredRestaurants.length > 0 ? filteredRestaurants : mockRestaurants);
-        setError('Using mock data due to limited API coverage in Nigeria.');
+      // Fallback to ALL mock data for Nigeria on API failure
+      if (isNigerianSearch) {
+        setRestaurants(mockRestaurants); // Display all mock restaurants for Nigerian searches on API error
+        setError('Live restaurant data for this region is limited. Displaying sample Nigerian restaurants.');
       } else {
-        const errMsg = err.response?.data?.message || 'Failed to fetch restaurants. Try a Nigerian city (e.g., Lagos).';
+        // Generic error for non-Nigerian searches
+        const errMsg = err.response?.data?.message || 'Failed to fetch restaurants. Try a more general location or a known Nigerian city.';
         setError(errMsg);
         setErrorModal(errMsg);
       }
@@ -83,7 +96,7 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4" // Added padding
+        className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4"
         onClick={() => setShowModal(false)}
       >
         <motion.div
@@ -91,24 +104,24 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.8, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-white rounded-2xl p-6 sm:p-8 max-w-md sm:max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500" // Adjusted max-width and padding
+          className="bg-white rounded-2xl p-6 sm:p-8 max-w-md sm:max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-gradient-to-r from-orange-500 to-pink-500"
           onClick={(e) => e.stopPropagation()}
         >
           <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 bg-clip-text bg-gradient-to-r from-teal-500 to-lime-500">
-            Search Restaurants in Nigeria
+            Search Restaurants
           </h3>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-2 mb-6">
             <input
               type="text"
               value={locationInput}
               onChange={(e) => setLocationInput(e.target.value)}
-              placeholder="Enter a Nigerian city (e.g., Lagos, Abuja)"
+              placeholder="Enter a city, state, or country (e.g., New York, Lagos)"
               className="flex-1 p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
               onKeyPress={(e) => e.key === 'Enter' && searchRestaurants()}
             />
             <button
               onClick={searchRestaurants}
-              className="bg-gradient-to-r from-teal-500 to-lime-500 text-white px-5 py-3 rounded-xl hover:from-teal-600 hover:to-lime-600 transition duration-200 shadow-md hover:shadow-lg"
+              className="bg-gradient-to-r from-teal-500 to-lime-500 text-white px-5 py-3 rounded-xl hover:from-teal-600 hover:to-teal-600 transition duration-200 shadow-md hover:shadow-lg"
             >
               Search
             </button>
@@ -134,7 +147,7 @@ function RestaurantSearchModal({ setShowModal, setErrorModal }) {
               ))}
             </ul>
           ) : (
-            <p className="text-gray-600 text-center py-4 text-sm sm:text-base">Enter a Nigerian city to find restaurants.</p>
+            <p className="text-gray-600 text-center py-4 text-sm sm:text-base">Enter a city, state, or country to find restaurants. Try a known Nigerian city for sample data.</p>
           )}
           <button
             onClick={() => setShowModal(false)}

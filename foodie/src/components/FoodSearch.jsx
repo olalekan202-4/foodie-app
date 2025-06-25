@@ -78,38 +78,50 @@ function FoodSearch({ setError }) {
         restaurantPromise,
       ]);
 
-      // Process results
-      let restaurants = restaurantRes.data.restaurants || [];
-      if (
-        restaurants.length === 0 ||
-        restaurantRes.error ||
-        searchInput.toLowerCase().includes('nigeria') ||
-        ['lagos', 'abuja', 'port harcourt'].some((city) =>
-          searchInput.toLowerCase().includes(city)
-        )
-      ) {
-        // Use mock data for Nigeria or failed API calls
-        restaurants = mockRestaurants.filter((restaurant) =>
-          searchInput.toLowerCase().includes(restaurant.city.toLowerCase()) ||
-          searchInput.toLowerCase().includes('nigeria')
-        );
-        if (restaurants.length === 0 && searchInput.toLowerCase().includes('nigeria')) {
-          restaurants = mockRestaurants; // Return all mock data if "Nigeria" is searched
+      let restaurantsToDisplay = restaurantRes.data.restaurants || [];
+      const normalizedSearchInput = searchInput.toLowerCase();
+
+      const isNigerianSearch = normalizedSearchInput.includes('nigeria') ||
+                               ['lagos', 'abuja', 'port harcourt'].some((city) =>
+                                 normalizedSearchInput.includes(city)
+                               );
+
+      // Handle restaurant results and mock data fallback
+      if (restaurantsToDisplay.length === 0 && (restaurantRes.error || isNigerianSearch)) {
+        // If API failed OR it's a Nigerian search (and API returned no results), use mock data
+        if (isNigerianSearch) {
+          // For Nigerian searches, we now always show all mock data if API fails or is empty
+          restaurantsToDisplay = mockRestaurants;
+        } else {
+          restaurantsToDisplay = []; // For non-Nigerian searches, if API fails/empty, show nothing
         }
       }
 
       setResults({
         recipes: recipeRes.data.results || [],
         products: productRes.data.products || [],
-        restaurants,
+        restaurants: restaurantsToDisplay,
       });
 
-      // Set errors for failed API calls
       const errors = [];
       if (recipeRes.error) errors.push('Failed to fetch recipes.');
       if (productRes.error) errors.push('Failed to fetch products.');
-      if (restaurantRes.error && restaurants.length === 0)
-        errors.push('Using mock restaurant data due to limited API coverage.');
+
+      // Refined error messaging for restaurants
+      if (restaurantRes.error && !isNigerianSearch) {
+        errors.push('Failed to fetch restaurants. The API might have limited coverage for this location.');
+      } else if (restaurantRes.error && isNigerianSearch) {
+         // API failed for Nigerian search, but we are displaying mock data
+        errors.push('Live restaurant data for this region is limited. Displaying sample Nigerian restaurants.');
+      } else if (restaurantsToDisplay.length === 0 && normalizedSearchInput.length > 0 && !isNigerianSearch) {
+          // No restaurants found for a non-Nigerian search, and API didn't explicitly error
+          errors.push('No restaurants found for this location. The API might have limited coverage.');
+      } else if (restaurantsToDisplay.length > 0 && isNigerianSearch && !restaurantRes.error && restaurantRes.data.restaurants?.length === 0) {
+          // For Nigerian search, API succeeded but returned empty, so we used mock data.
+          errors.push('Live restaurant data for this region is limited. Displaying sample Nigerian restaurants.');
+      }
+
+
       if (errors.length > 0) setError(errors.join(' '));
     } catch (err) {
       setResults({ recipes: [], products: [], restaurants: [] });
@@ -135,7 +147,7 @@ function FoodSearch({ setError }) {
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search recipes, products, restaurants in Nigeria (e.g., Lagos, jollof rice)"
+          placeholder="Search recipes, products, restaurants (e.g., Lagos, jollof rice, New York)"
           className="flex-1 p-3 sm:p-4 border-2 border-gradient-to-r from-orange-400 to-pink-400 rounded-xl focus:outline-none focus:ring-4 focus:ring-teal-300 transition duration-200 bg-gray-50 text-gray-800"
           onKeyPress={(e) => e.key === 'Enter' && performSearch()}
         />
